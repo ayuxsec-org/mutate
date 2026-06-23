@@ -1,4 +1,4 @@
-module github.com/ayuxsec/mutate
+module github.com/ayuxsec-org/mutate
 
 go 1.26.2
 

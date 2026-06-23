@@ -1,6 +1,6 @@
 package main
 
-import "github.com/ayuxsec/mutate"
+import "github.com/ayuxsec-org/mutate"
 
 func NewCmdi() *Cmdi {
 	return &Cmdi{}

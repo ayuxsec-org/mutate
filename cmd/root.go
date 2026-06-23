@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/ayuxsec/mutate"
+	"github.com/ayuxsec-org/mutate"
 	"github.com/spf13/cobra"
 )
 
