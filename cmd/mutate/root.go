@@ -19,10 +19,11 @@ func (cmdi *Cmdi) NewRootCmd() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return cmdi.RunRoot()
 		},
+		Version: mutate.VersionString(),
 	}
 	rootCmd.PersistentFlags().StringVarP(&cmdi.URLsPath, "urls", "l", "", "Path to the input URL list")
-	rootCmd.PersistentFlags().BoolVarP(&cmdi.Opts.MutatePaths, "path", "p", false, "Replace URL Paths")
-	rootCmd.PersistentFlags().BoolVarP(&cmdi.Opts.MutateKeys, "keys", "k", false, "Replace URL query params")
+	rootCmd.PersistentFlags().BoolVarP(&cmdi.Opts.MutatePaths, "path", "p", false, "Mutate URL Paths")
+	rootCmd.PersistentFlags().BoolVarP(&cmdi.Opts.MutateKeys, "keys", "k", false, "Mutate URL query params")
 	rootCmd.PersistentFlags().StringVarP(&cmdi.Identifier, "id", "i", mutate.DefaultIdentifier, "identifer to use")
 
 	return rootCmd
@@ -33,7 +34,9 @@ func (cmdi *Cmdi) RunRoot() error {
 	if isPipedStdin() {
 		rawURLs = fileToSlice(os.Stdin)
 	} else {
-		rawURLs = fileToSlice(must(os.Open(cmdi.URLsPath)))
+		file := must(os.Open(cmdi.URLsPath))
+		defer file.Close()
+		rawURLs = fileToSlice(file)
 	}
 	mutator := mutate.New(rawURLs, cmdi.Identifier,
 		mutate.NewOpts(cmdi.Opts.MutatePaths, cmdi.Opts.MutateKeys),
